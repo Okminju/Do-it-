@@ -1,7 +1,0 @@
-package hello;
-
-public class HelloJava{
-public static void main(String[ ]args){
-System.out.println("Okminju") //문자열에 대하여 ""(큰따옴표)사용하기-내이름을 출력 
-} //main에 대한 중괄호 
-} //class에 대한 중괄호
