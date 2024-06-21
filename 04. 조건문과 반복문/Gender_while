@@ -1,0 +1,170 @@
+package loopex.gender;
+
+import java.util.Scanner;
+
+public class Gender_while {
+
+	public static void main(String[] args) {
+		/*[과제 2024-06-18]
+		*[문제] while문 사용: 
+		*주민등록번호를 입력받아 "yyyy년 mm월 dd일" "당신은 2000년 이전/이후 에 태어난 남성/여성입니다."
+		*
+		*단, stop 입력시 멈춤
+		*/
+		
+		
+		Scanner sc = new Scanner(System.in);
+		
+		String idNum;
+		
+		
+		
+		boolean flag = true; 
+		while(flag) {
+			System.out.println("주민등록번호를 입력(예: 010627-3******> stop 입력시 멈춤");
+			
+			//next()는 공백은 구분자이므로 무시 " 010627-3******" 
+			//String idNum = sc. next();//"010627-3******" 
+			
+			//nextline()는 엔터까지 읽어드린 후 나머지 문자로 문자열 객체 생성 " 010627-3****** "
+			idNum = sc.nextLine().trim();//" 010627-3****** " => "010627-3******"
+			
+		
+			if(idNum.equalsIgnoreCase("STOP")|| idNum.contains("STOP")) {
+			flag = false;
+			break;//가장 가까운 반복문 빠져나감
+			}
+			
+			//주민등록번호를 일부만 입력해도 될 때 	
+			if(idNum.length() <8 || idNum.indexOf("-") != 6) {
+				System.out.println("잘못 입력하셨습니다. 다시 입력하세요.");
+				continue;//아래 소스를 건너뛰고 반복문의 위로 올라감 
+				}
+			
+			//주민등록번호를 모두 다 입력해야 될 때
+			String [] idNumSplit = idNum.split("-");
+			String idNumBefore = idNumSplit[0];//"010627"의 주소
+			String idNumAfter = idNumSplit[1];//"16*****"의 주소
+			
+			if(idNumBefore.length()!= 6 || idNumAfter.length() != 7) 
+			{
+				System.out.println("잘못 입력하셨습니다. 다시 입력하세요.");
+				continue;
+			}
+			
+			//-중심으로 앞 뒤 값이 정수인지 확인 => 정수가 아닌 문자 걸러냄 
+			try {
+			int idNumBeforeInt = Integer.parseInt(idNumBefore);//NumberFormatException
+			int idNumAfterInt = Integer.parseInt(idNumAfter);
+			} catch(Exception e) {//예외 잡아서
+				//처리
+				System.out.println("수가 아닌 문자를 입력했습니다. 다시 입력하세요.");
+				continue;//아래 소스 건너뛰고 반복문의 위로 올라감
+			}
+			
+			//charAt(7) : index 7위치의 문자 1개 추출
+			//char gender = idNum.charAt(7);
+			//String gender = idNum.substring(7, 7+1);
+			String gender = idNumAfter.substring(0, 0+1);
+			
+			//성별확인 방법 -1 : char gender 
+//			if(!('1'<=gender && gender <='4')) {
+//				System.out.println("8번째 수를 확인해주세요");
+//				continue;
+//				}
+			
+			//성별확인 방법 -2 : String gender
+			//if(!gender.equals("1") && !gender.equals("2") &&!gender.equals("3") && !gender.equals("4")){
+			if(!(gender.equals("1") || gender.equals("2") || gender.equals("3") || gender.equals("4"))){
+				System.out.println("8번째 수를 확인해주세요");
+				continue;
+				}
+				
+			
+
+		//년도 추출 -> 확인
+		String yy = idNum.substring(0,2);//년도 "00"~"99"
+		//비교 연산자로 비교 위해 int로 변환
+		
+		int yyInt = Integer.parseInt(yy);
+		
+		//if(0> yyInt || yyInt > 99) 
+		if(!(0<= yyInt && yyInt <= 99)) {
+			System.out.println("1번째와 2번째 수를 잘못 입력했습니다. 다시 입력해주세요");
+			//System.out.println(yyInt + "년은 없습니다.");
+			continue; 
+		}
+		
+		//월 추출 -> 확인
+		String mm = idNum.substring(2,4);// 월 "01"~"12"
+		int mmInt = Integer.parseInt(mm);
+		
+		//if(1> mmInt || mmInt > 12) 
+		if(!(1<= mmInt && mmInt <= 12)) {
+			System.out.println("3번째와 4번째 수를 잘못 입력했습니다. 다시 입력해주세요");
+			System.out.println(mmInt + "월은 없습니다.");
+			continue; 
+		}
+		
+		//일 추출 -> 확인
+		String dd = idNum.substring(4,6);
+		int ddInt = Integer.parseInt(dd);
+		
+		//if(1> ddInt || ddInt > 31) 
+		if(mmInt != 2) {
+		if(!(1<= ddInt && ddInt <= 31)) {
+			System.out.println("5번째와 6번째 수를 잘못 입력했습니다. 다시 입력해주세요");
+			System.out.println(ddInt + "일은 없습니다.");
+			continue; 
+		}}else {//mmInt ==2
+			if(!(1<= ddInt && ddInt <= 29)) {
+				System.out.println("5번째와 6번째 수를 잘못 입력했습니다. 다시 입력해주세요");
+				System.out.println( mmInt + "월에는" + ddInt + "일은 없습니다.");
+				continue; }
+		}
+		
+		
+		String result = ""; //문자열 연결 위해 "" 
+		
+		switch(gender) {
+		case "1" : 
+		case "2" : 
+				result = result + "19"; break;
+	
+		case "3" : 
+		case "4" : 
+				result = result + "20"; break;
+				//default : System.out.println("잘못된 주민등록번호입니다.");//break; 생략
+		}
+		
+		//result = result + yy+ " 년 "+ mm+ " 월 "+dd+" 일 ";
+		//대입연산자 우선 순위 낮음
+		result += yy+ " 년 "+ mm+ " 월 "+dd+" 일 ";
+		
+		switch(gender) {
+		case "1" :	
+		case "3" : 
+					switch(gender) {
+					case "1": result += " 2000년 이전에 태어난 "; break;//안쪽 switch문 빠져나감
+					case "3" : result +=" 2000년 이후에 태어난 ";}//break;
+			
+					result += " 남성입니다. "; break; //바깥쪽 switch문 빠져나감
+		
+		case "2" :
+		case "4" : 
+					switch(gender) {
+					case "2": result +=" 2000년 이전에 태어난 "; break;
+					case "4" : result +=" 2000년 이후에 태어난 ";}
+		
+					result += " 여성입니다. "; break;
+		
+			//default : System.out.println("잘못된 주민등록번호입니다.");//break;
+			}//바깥쪽 switch문
+		
+					System.out.println(result);
+		
+		
+		}System.out.println("프로그램 끝");
+	}
+
+	}
